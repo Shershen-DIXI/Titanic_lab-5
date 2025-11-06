@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from src.titanic_app import TitanicAnalysis
 
+
 class TestTitanicAnalysis:
     """Тесты для класса анализа данных Титаника."""
     
@@ -86,12 +87,15 @@ class TestTitanicAnalysis:
 
 def test_run_streamlit_app(monkeypatch):
     """Тест запуска Streamlit приложения."""
+    # Мокаем Streamlit функции чтобы избежать их реального выполнения
     mock_functions = {}
     for func in ['image', 'title', 'sidebar', 'selectbox', 'multiselect', 
                  'slider', 'dataframe', 'write', 'header']:
         mock_functions[func] = lambda *args, **kwargs: None
+    
     for func_name, mock_func in mock_functions.items():
         monkeypatch.setattr(f"streamlit.{func_name}", mock_func)
     
+    # Импортируем и запускаем функцию
     from src.titanic_app import run_streamlit_app
     run_streamlit_app()
