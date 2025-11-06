@@ -1,0 +1,5 @@
+secrets.txt
+config.ini
+.env
+*.key
+*.pem
