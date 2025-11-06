@@ -29,7 +29,7 @@ jobs:
         
     - name: Run tests with pytest
       run: |
-        pytest tests/ -v --cov=src
+        pytest tests/ -v
 
     - name: Test Streamlit app import
       run: |
