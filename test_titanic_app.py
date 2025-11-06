@@ -1,9 +1,11 @@
 import pytest
 import pandas as pd
 
+
 def test_basic():
     """Базовый тест."""
     assert 1 + 1 == 2
+
 
 def test_import():
     """Тест импорта основного модуля."""
@@ -12,6 +14,7 @@ def test_import():
         assert True
     except ImportError as e:
         assert False, f"Ошибка импорта: {e}"
+
 
 class TestTitanicAnalysis:
     def test_creation(self, tmp_path):
