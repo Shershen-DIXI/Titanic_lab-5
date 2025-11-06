@@ -5,7 +5,7 @@ from titanic_analysis import TitanicAnalysis
 class TestTitanicAnalysis:
     """Тесты для класса анализа данных Титаника."""
     
-    @pytest.fixture
+    fixture
     def sample_data_path(self):
         # Создаем временный CSV файл для тестов
         data = {
@@ -23,7 +23,7 @@ class TestTitanicAnalysis:
         if os.path.exists(path):
             os.remove(path)
     
-    @pytest.fixture
+    fixture
     def analysis_instance(self, sample_data_path):
         """Фикстура, создающая экземпляр класса для тестов."""
         return TitanicAnalysis(sample_data_path)
