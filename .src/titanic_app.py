@@ -59,16 +59,19 @@ def run_streamlit_app():
     st.image("titanic.jpg")
     st.title("Пассажиры Титаника")
     
+    # Инициализация анализатора
     analyzer = TitanicAnalysis()
     
     st.sidebar.header("Фильтры")
     
+    # Фильтр пола
     sex_filter = st.sidebar.selectbox(
         "Пол:",
         options=['female', 'male'],
         index=0
     )
     
+    # Фильтр выживания
     survived_filter = st.sidebar.selectbox(
         "Выжил:",
         options=[1, 0],
@@ -76,12 +79,14 @@ def run_streamlit_app():
         index=0
     )
     
+    # Фильтр класса
     class_filter = st.sidebar.multiselect(
         "Класс:",
         options=sorted(analyzer.df['Pclass'].unique()),
         default=sorted(analyzer.df['Pclass'].unique())
     )
     
+    # Ползунок платы за проезд
     fare_range = st.sidebar.slider(
         "Плата за проезд:",
         min_value=float(analyzer.df['Fare'].min()),
@@ -89,6 +94,7 @@ def run_streamlit_app():
         value=(float(analyzer.df['Fare'].min()), float(analyzer.df['Fare'].max()))
     )
     
+    # Применение фильтров
     filtered_df = analyzer.filter_data(
         sex=sex_filter,
         survived=survived_filter,
@@ -96,9 +102,11 @@ def run_streamlit_app():
         fare_range=fare_range
     )
     
+    # Отображение результатов
     st.dataframe(filtered_df, use_container_width=True)
     st.write(f"Найдено записей: {len(filtered_df)}")
-
+    
+    # Дополнительная статистика
     stats = analyzer.get_statistics(filtered_df)
     st.sidebar.header("Статистика")
     st.sidebar.write(f"Всего записей: {stats['total_count']}")
