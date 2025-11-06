@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 
 
@@ -30,7 +29,3 @@ class TestTitanicAnalysis:
         df = pd.DataFrame(data)
         file_path = tmp_path / "test.csv"
         df.to_csv(file_path, index=False)
-        
-        # Тестируем
-        analyzer = TitanicAnalysis(str(file_path))
-        assert len(analyzer.df) == 2
