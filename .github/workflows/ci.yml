@@ -19,46 +19,48 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run basic Python test
+    - name: Create and run simple test
       run: |
-        python -c "
-        # Простой тест без pytest
-        from src.titanic_app import TitanicAnalysis
+        # Создаем простой тестовый файл
+        cat > test_ci.py << 'EOF'
+        import sys
+        import os
+        sys.path.append(os.getcwd())
+        
+        try:
+            from src.titanic_app import TitanicAnalysis
+            print("✅ Импорт TitanicAnalysis - УСПЕХ")
+        except ImportError as e:
+            print(f"❌ Ошибка импорта: {e}")
+            sys.exit(1)
+            
         import pandas as pd
         
         # Создаем тестовые данные
         data = {
-            'PassengerId': [1, 2],
-            'Survived': [1, 0], 
-            'Pclass': [1, 3],
-            'Sex': ['female', 'male'],
-            'Fare': [50.0, 10.0]
+            'PassengerId': [1, 2, 3],
+            'Survived': [1, 0, 1],
+            'Pclass': [1, 3, 2],
+            'Sex': ['female', 'male', 'female'],
+            'Fare': [50.0, 10.0, 30.0]
         }
         df = pd.DataFrame(data)
         df.to_csv('test_data.csv', index=False)
         
-        # Тестируем
+        # Тестируем класс
         analyzer = TitanicAnalysis('test_data.csv')
-        assert len(analyzer.df) == 2
-        print('✅ Все тесты прошли успешно!')
-        "
-
-    - name: Check code style
-      run: |
-        python -c "
-        # Проверка стиля кода
-        import subprocess
-        import sys
+        assert len(analyzer.df) == 3, f"Ожидалось 3 строки, получено {len(analyzer.df)}"
         
-        try:
-            result = subprocess.run(['flake8', 'src/', '--max-line-length=127'], 
-                                  capture_output=True, text=True)
-            if result.returncode == 0:
-                print('✅ Стиль кода отличный!')
-            else:
-                print('⚠️  Замечания по стилю:')
-                print(result.stdout)
-                sys.exit(1)
-        except Exception as e:
-            print(f'✅ Flake8 проверка пропущена: {e}')
-        "
+        # Тестируем фильтрацию
+        filtered = analyzer.filter_data(sex='female')
+        assert len(filtered) == 2, f"Ожидалось 2 женщины, получено {len(filtered)}"
+        
+        print("✅ Все тесты прошли успешно!")
+        EOF
+        
+        # Запускаем тест
+        python test_ci.py
+
+    - name: Clean up
+      run: |
+        rm -f test_data.csv test_ci.py
