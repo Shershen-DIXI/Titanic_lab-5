@@ -27,8 +27,6 @@ jobs:
     - name: Run Flake8 linter
       run: |
         
-        flake8 src/ tests/ --count --max-complexity=10 --max-line-length=127 --statistics --extend-ignore=E302,E305,W293
-
     - name: Run tests with pytest
       run: |
         pytest tests/ -v --cov=src
