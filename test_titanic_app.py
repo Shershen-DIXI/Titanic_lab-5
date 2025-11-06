@@ -8,14 +8,14 @@ def test_basic():
 def test_import():
     """Тест импорта основного модуля."""
     try:
-        from src.titanic_app import TitanicAnalysis
+        from titanic_app import TitanicAnalysis
         assert True
     except ImportError as e:
         assert False, f"Ошибка импорта: {e}"
 
 class TestTitanicAnalysis:
     def test_creation(self, tmp_path):
-        from src.titanic_app import TitanicAnalysis
+        from titanic_app import TitanicAnalysis
         # Создаем тестовые данные
         data = {
             'PassengerId': [1, 2],
